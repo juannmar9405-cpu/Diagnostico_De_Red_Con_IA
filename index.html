@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>Auditor de Red (QoS) | Diagnostica tu Conexión</title>
+    <!-- 
+        Chosen Palette: Vibrant Tech (Gris oscuro, Blanco, Gradiente Cian-Azul)
+        Application Structure Plan: Se diseña una SPA (Single Page Application) de tipo "landing page" con un flujo vertical claro. El objetivo es presentar la aplicación de escritorio "Auditor de Red" (desarrollada previamente) al usuario. La arquitectura sigue una narrativa lógica: 1. Héroe (Problema/Solución), 2. Características (Qué hace), 3. Propuesta de Valor (Por qué es diferente - Cero Admin), 4. Demostración (Cómo funciona - Asistente IA), 5. CTA (Descarga). Se usa JavaScript para animaciones "fade-in" al scrollear, creando una experiencia "dinámica y elegante" según la solicitud.
+        Visualization & Content Choices: 
+        - Report Info: Características de la app de escritorio (Speedtest, Ping/Jitter/Loss, DNS, HTTP, AI). Goal: Informar y persuadir para la descarga.
+        - Viz/Presentation: Se usan "Tarjetas" (Grid de Tailwind) para las Características, un bloque de "Código" simulado para el Asistente IA, y un "Hero" de alto impacto. 
+        - Interaction: Navegación con scroll suave y "fade-in" de secciones (IntersectionObserver).
+        - Justification: Esta estructura es óptima para el lanzamiento de un producto de software, guiando al usuario desde el interés hasta la conversión (descarga).
+        - Library/Method: Vanilla JS (IntersectionObserver), Tailwind CSS.
+        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Gris oscuro (fondo) */
+            color: #E5E7EB; /* Gris claro (texto) */
+        }
+        .nav-link {
+            @apply px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 rounded-lg;
+        }
+        .hero {
+            background: linear-gradient(rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 1)), url('https://placehold.co/1920x1080/1F2937/3B82F6?text=Red+de+Conexiones');
+            background-size: cover;
+            background-position: center;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card {
+            @apply bg-gray-800/70 backdrop-blur-md p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 ring-1 ring-gray-700/50;
+        }
+        .btn-primary {
+            @apply bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 px-8 rounded-full hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg text-lg;
+        }
+        .btn-secondary {
+            @apply bg-gray-700 text-white font-bold py-3 px-8 rounded-full hover:bg-gray-600 transition-all duration-300;
+        }
+        .text-accent {
+            color: #22d3ee; /* Tailwind cyan-400 */
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Header y Navegación -->
+    <header class="bg-gray-900/80 backdrop-blur-md shadow-sm sticky top-0 z-50 w-full">
+        <nav class="container mx-auto max-w-6xl px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white">
+                <span class="text-cyan-400">Auditor</span> de Red
+            </a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#inicio" class="nav-link">Inicio</a>
+                <a href="#caracteristicas" class="nav-link">Características</a>
+                <a href="#diagnostico" class="nav-link">Diagnóstico</a>
+                <a href="#descarga" class="nav-link">Descarga</a>
+            </div>
+            <div class="md:hidden">
+                <button class="text-gray-300 text-3xl">&#9776;</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sección Hero (Inicio) -->
+    <section id="inicio" class="hero h-[90vh] flex items-center justify-center text-white text-center">
+        <div class="max-w-4xl px-6 fade-in-section is-visible">
+            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">¿Internet lento? <br> Deja de adivinar.</h1>
+            <p class="text-xl md:text-2xl mb-10 font-light max-w-2xl mx-auto">Te presentamos el **Auditor de Red (QoS)**, la herramienta de escritorio que diagnostica la *calidad real* de tu conexión y te da soluciones claras.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#descarga" class="btn-primary">Descargar para Windows</a>
+                <a href="#caracteristicas" class="btn-secondary">Conocer Más</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenedor Principal -->
+    <main class="container mx-auto max-w-6xl px-6 py-20">
+
+        <!-- Sección Características -->
+        <section id="caracteristicas" class="fade-in-section my-20">
+            <h2 class="text-4xl font-bold text-center mb-16 text-white">Un Diagnóstico Completo en 4 Pruebas</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Tarjeta 1: Velocidad -->
+                <div class="card">
+                    <div class="text-5xl mb-4">⚡</div>
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Test de Velocidad (Manual)</h3>
+                    <p class="text-gray-300">Mide tu ancho de banda de descarga real (Mbps) contra un CDN global, sin depender de librerías de terceros que fallan.</p>
+                </div>
+                <!-- Tarjeta 2: Estabilidad -->
+                <div class="card">
+                    <div class="text-5xl mb-4">📡</div>
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Estabilidad (Ping, Jitter, Pérdida)</h3>
+                    <p class="text-gray-300">La prueba más importante. Medimos la latencia (Ping), su inestabilidad (Jitter) y los micro-cortes (Pérdida) para diagnosticar la *calidad* de tu línea.</p>
+                </div>
+                <!-- Tarjeta 3: Respuesta -->
+                <div class="card">
+                    <div class="text-5xl mb-4">🌐</div>
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Respuesta (DNS y HTTP)</h3>
+                    <p class="text-gray-300">¿Las webs tardan en cargar? Medimos tu velocidad de resolución DNS y el tiempo de respuesta real (TTFB) de los servidores web.</p>
+                </div>
+                <!-- Tarjeta 4: IA -->
+                <div class="card">
+                    <div class="text-5xl mb-4">🧠</div>
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Asistente de Diagnóstico IA</h3>
+                    <p class="text-gray-300">El cerebro de la app. Un sistema experto analiza todos los números y los traduce a un diagnóstico claro y a soluciones prácticas que puedes aplicar.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección USP (Cero Admin) -->
+        <section class="fade-in-section my-24 bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
+            <div class="grid md:grid-cols-2 items-center">
+                <div class="p-10 md:p-16">
+                    <h2 class="text-4xl font-bold mb-6 text-white">La Diferencia Clave: <br><span class="text-cyan-400">CERO Admin.</span></h2>
+                    <p class="text-lg text-gray-300 mb-6">Hemos rediseñado las pruebas de Ping y Jitter desde cero (usando TCP Ping al puerto 443) para que **no necesites permisos de Administrador**.</p>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-center"><span class="text-green-400 mr-3 text-2xl">&#10004;</span> 100% Seguro y fácil de usar.</li>
+                        <li class="flex items-center"><span class="text-green-400 mr-3 text-2xl">&#10004;</span> Sin molestas ventanas de permisos (UAC).</li>
+                        <li class="flex items-center"><span class="text-green-400 mr-3 text-2xl">&#10004;</span> Simplemente haz doble clic y funciona.</li>
+                    </ul>
+                </div>
+                <div class="hidden md:block h-full">
+                    <img src="https://placehold.co/600x500/111827/3B82F6?text=Seguridad+y+Facilidad" alt="Escudo de Seguridad" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Diagnóstico (IA) -->
+        <section id="diagnostico" class="fade-in-section my-20">
+            <h2 class="text-4xl font-bold text-center mb-4 text-white">De Números a Soluciones</h2>
+            <p class="text-lg text-center text-gray-400 mb-12 max-w-2xl mx-auto">El Asistente IA no solo te dice *qué* está mal, te dice *por qué* y *cómo* arreglarlo.</p>
+            
+            <div class="bg-gray-900 border border-gray-700 rounded-xl shadow-xl max-w-3xl mx-auto p-8">
+                <h3 class="text-lg font-semibold text-white mb-4">--- Diagnóstico del Asistente IA ---</h3>
+                <div class="font-mono text-sm space-y-4">
+                    <div>
+                        <p class="text-gray-400">DIAGNÓSTICO:</p>
+                        <p class="text-red-400">- Jitter MUY ALTO (32.5 ms): Causa principal de cortes y voz robótica en videollamadas.</p>
+                        <p class="text-yellow-400">- Resolución DNS LENTA (160.1 ms): Las páginas web tardan mucho en empezar a cargar.</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400">SOLUCIONES RECOMENDADAS:</p>
+                        <p class="text-accent">- [Eje 1] El WiFi está muy congestionado. Cambia de canal o usa cable Ethernet.</p>
+                        <p class="text-accent">- [Eje 1] Cambia los servidores DNS de tu PC a unos públicos (ej. 1.1.1.1).</p>
+                        <p class="text-accent">- [Eje 3] Reporta 'Inestabilidad (Jitter)' a tu ISP. Esto es congestión en sus nodos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Descarga (CTA) -->
+        <section id="descarga" class="fade-in-section my-20 text-center">
+            <div class="bg-gray-800 p-10 md:p-16 rounded-xl shadow-2xl max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold text-white mb-6">Obtén tu Diagnóstico en Minutos</h2>
+                <p class="text-lg text-gray-300 mb-10">Descarga la última versión del Auditor de Red. Es gratis, de código abierto y no requiere instalación.</p>
+                
+                <!-- 
+                    NOTA: Deberás reemplazar 'URL_AL_ZIP_EN_GITHUB' con el enlace 
+                    real a tu archivo .zip en la sección 'Releases' de tu repositorio.
+                -->
+                <a href="https://github.com/TU_USUARIO/TU_REPOSITORIO/releases/download/v1.20/AuditorDeRed_App.zip" class="btn-primary inline-block">
+                    Descargar v1.20 para Windows
+                </a>
+                
+                <p class="text-gray-500 text-sm mt-4">Compatible con Windows 10 y 11 | Cero permisos de admin</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 text-gray-400 py-12">
+        <div class="container mx-auto max-w-6xl px-6 text-center">
+            <p class="text-lg font-bold text-white mb-4">Auditor de Red (QoS)</p>
+            <p class="mb-4">Un proyecto de código abierto construido para empoderar a los usuarios.</p>
+            <p>&copy; 2025 | Creado con la ayuda de Juan y Gemini.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Lógica para Animación de Fade-in al Scrollear ---
+            const sections = document.querySelectorAll('.fade-in-section');
+
+            const observerOptions = {
+                root: null, // usa el viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% de la sección debe ser visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Dejar de observar una vez que es visible
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+
